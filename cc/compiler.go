@@ -381,6 +381,16 @@ func (compiler *baseCompiler) compilerFlags(ctx ModuleContext, flags Flags, deps
 		compiler.srcsBeforeGen = append(compiler.srcsBeforeGen, deps.GeneratedSources...)
 	}
 
+	additionalIncludeDirs := ctx.DeviceConfig().TargetSpecificHeaderPath()
+	if len(additionalIncludeDirs) > 0 {
+		// devices can have multiple paths in TARGET_SPECIFIC_HEADER_PATH
+		// add -I in front of all of them
+		if (strings.Contains(additionalIncludeDirs, " ")) {
+			additionalIncludeDirs = strings.ReplaceAll(additionalIncludeDirs, " ", " -I")
+		}
+		flags.Local.CommonFlags = append(flags.Local.CommonFlags, "-I" + additionalIncludeDirs)
+	}
+
 	cflags := compiler.Properties.Cflags.GetOrDefault(ctx, nil)
 	cppflags := compiler.Properties.Cppflags.GetOrDefault(ctx, nil)
 	CheckBadCompilerFlags(ctx, "cflags", cflags)
