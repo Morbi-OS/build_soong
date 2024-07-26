@@ -184,19 +184,26 @@ var BannerVars = []string{
 func Banner(config Config, make_vars map[string]string) string {
 	b := &bytes.Buffer{}
 
-	fmt.Fprintln(b, "============================================")
+	fmt.Fprintln(b, "=======================================================")
+    fmt.Fprintln(b, " █████████████████████████████████████████████████████ ")
+	fmt.Fprintln(b, " ██▀▄─██▄─▄▄─█─▄─▄─█▄─▄▄─█▄─▄▄▀█▄─▄███▄─▄█▄─▄▄─█▄─▄▄─█ ")
+	fmt.Fprintln(b, " ██─▀─███─▄█████─████─▄█▀██─▄─▄██─██▀██─███─▄████─▄█▀█ ")
+	fmt.Fprintln(b, " ▀▄▄▀▄▄▀▄▄▄▀▀▀▀▄▄▄▀▀▄▄▄▄▄▀▄▄▀▄▄▀▄▄▄▄▄▀▄▄▄▀▄▄▄▀▀▀▄▄▄▄▄▀ ")
+	fmt.Fprintln(b, "=======================================================")
+
 	for _, name := range BannerVars {
 		if make_vars[name] != "" {
 			fmt.Fprintf(b, "%s=%s\n", name, make_vars[name])
 		}
 	}
+
 	if config.skipKatiControlledByFlags {
 		fmt.Fprintf(b, "SOONG_ONLY=%t\n", config.soongOnlyRequested)
 	} else { // default for this product
 		fmt.Fprintf(b, "SOONG_ONLY=%t\n", make_vars["PRODUCT_SOONG_ONLY"] == "true")
 	}
 
-	fmt.Fprint(b, "============================================")
+	fmt.Fprintln(b, "=======================================================")
 
 	return b.String()
 }
